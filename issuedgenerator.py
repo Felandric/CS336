@@ -15,7 +15,7 @@ with open("issued.csv", "w", newline='') as issued:
 			drinkersList = list(drinkersReader)[1:]
 
 			minAttendance = 1
-			maxAttendance = 7
+			maxAttendance = 5
 			
 			issuedWriter.writerow(["transactionid", "issuedto", "issuedby", "date", "hour", "minute"])
 
