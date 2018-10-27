@@ -1,0 +1,26 @@
+Pattern 1: bills cannot be issued outside of bars operating hours
+
+	SELECT * FROM (SELECT * FROM issued I JOIN bars B ON I.issuedby=B.name) T
+	WHERE T.hour < T.openTime
+	OR T.hour >= T.closeTime
+
+	Result: 0 row(s) returned
+
+Patern 2: drinkers cannot frequent bars in a different state from the one in which they live
+
+	SELECT * FROM frequents F
+
+	JOIN bars B
+
+	ON F.bar=B.name 
+
+	JOIN drinkers D
+
+	ON F.drinker=D.name
+
+	WHERE D.state <> B.state
+
+	results: 0 row(s) returned
+
+Pattern 3: For every two beers b1 and b2, different bars may charge differently for b1 and b2 but b1 should either be less expensive than b2 in ALL bars or more expensive than b2 in ALL bars
+
