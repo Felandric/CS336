@@ -3,9 +3,9 @@ import random
 
 #contains 
 
-with open("contains.csv", "w", newline='') as contains:
-	with open("sells.csv", newline='') as sells:
-		with open("issued.csv", newline='') as issued:
+with open("../tables/contains.csv", "w", newline='') as contains:
+	with open("../tables/sells.csv", newline='') as sells:
+		with open("../tables/issued.csv", newline='') as issued:
 			issuedReader = csv.reader(issued, delimiter=';', quotechar='"')
 			sellsReader = csv.reader(sells, delimiter=';', quotechar='"')
 			containsWriter = csv.writer(contains, delimiter=';')

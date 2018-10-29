@@ -4,9 +4,9 @@ import uuid
 
 #issued 
 
-with open("issued.csv", "w", newline='') as issued:
-	with open("bars.csv", newline='') as bars:
-		with open("drinkers.csv", newline='') as drinkers:
+with open("../tables/issued.csv", "w", newline='') as issued:
+	with open("../tables/bars.csv", newline='') as bars:
+		with open("../tables/drinkers.csv", newline='') as drinkers:
 			drinkersReader = csv.reader(drinkers, delimiter=';', quotechar='"')
 			barsReader = csv.reader(bars, delimiter=';', quotechar='"')
 			issuedWriter = csv.writer(issued, delimiter=';')

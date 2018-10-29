@@ -3,9 +3,9 @@ import random
 
 #sells 
 
-with open("sells.csv", "w", newline='') as sells:
-	with open("bars.csv", newline='') as bars:
-		with open("items.csv", newline='') as items:
+with open("../tables/sells.csv", "w", newline='') as sells:
+	with open("../tables/bars.csv", newline='') as bars:
+		with open("../tables/items.csv", newline='') as items:
 			itemsReader = csv.reader(items, delimiter=';', quotechar='"')
 			itemsList = list(itemsReader)[1:]
 			
