@@ -24,3 +24,68 @@ Patern 2: drinkers cannot frequent bars in a different state from the one in whi
 
 Pattern 3: For every two beers b1 and b2, different bars may charge differently for b1 and b2 but b1 should either be less expensive than b2 in ALL bars or more expensive than b2 in ALL bars
 
+	select s1.item, s2.item from sells s1, sells s2, items i1, items i2
+
+	where ((s1.item=i1.name and i1.manufacturer is not null) 
+	and 
+(s2.item=i2.name and i2.manufacturer is not null)
+	
+and s1.bar=s2.bar 
+
+	and s1.item <> s2.item 
+
+	and s1.price > s2.price 
+
+	and exists (select * from sells s3, sells s4 where s3.bar = s4.bar and s3.item = s1.item and s4.item = s2.item and s3.price < s4.price)); 
+
+
+	NOTE: this query is too heavy to run on the full table. As a result, we tested on a smaller subset of the sells table. Here is a set of queries which 
+	creates the subset table, runs the query (returns 0 rows as expected), then modifies the tuple to violate the rule, shows the violating tuples, then deletes
+	the temporary table.
+	
+	drop table T;
+
+	
+
+create table T as
+(select * from sells where bar like "a%");
+
+
+
+	select s1.item, s2.item from T s1, T s2, items i1, items i2
+
+	where ((s1.item=i1.name and i1.manufacturer is not null) 
+	and 
+(s2.item=i2.name and i2.manufacturer is not null)
+	
+and s1.bar=s2.bar 
+	
+and s1.item <> s2.item 
+
+	and s1.price > s2.price 
+	
+and exists (select * from T s3, T s4 where s3.bar = s4.bar and s3.item = s1.item and s4.item = s2.item and s3.price < s4.price)); 
+
+
+
+	update T set price=10 where bar="Adonis" and item="Michelob ULTRA" limit 1;
+
+
+
+	select s1.item, s2.item from T s1, T s2, items i1, items i2
+
+	where ((s1.item=i1.name and i1.manufacturer is not null) 
+	and 
+(s2.item=i2.name and i2.manufacturer is not null)
+	
+and s1.bar=s2.bar 
+	
+and s1.item <> s2.item 
+
+	and s1.price > s2.price 
+	
+and exists (select * from T s3, T s4 where s3.bar = s4.bar and s3.item = s1.item and s4.item = s2.item and s3.price < s4.price)); 
+
+
+
+	drop table T;
