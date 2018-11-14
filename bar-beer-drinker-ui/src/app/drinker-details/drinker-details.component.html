@@ -1,0 +1,36 @@
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">{{drinkerName}}</h1>
+    <p class="drinker-details" *ngIf="drinker">
+      {{drinker?.address}} <span *ngIf="drinker.address && drinker.city">|</span>
+      {{drinker?.city}} <span>|</span> {{drinker?.state}}
+      <br/>
+      {{drinker?.phone}}
+    </p>
+  </div>
+</div>
+
+<div class="container">
+  <p-table [value]="bills">
+    <ng-template pTemplate="header">
+        <tr>
+          <th>Bar</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Amount Charged</th>
+          <th>Tip</th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-bill let-expanded="expanded">
+        <tr>
+          <td><a routerLink="/bar/{{bill.issuedby}}">{{bill.issuedby}}</a></td>
+          <td>{{bill.date}}</td>
+          <td>{{bill.hour}}</td>
+          <td>${{bill.totalCharge}}</td>
+          <td>${{bill.tip}}</td>
+        </tr>
+    </ng-template>
+  </p-table>
+</div>
+<br/>
