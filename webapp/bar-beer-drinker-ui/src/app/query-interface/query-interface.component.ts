@@ -9,9 +9,9 @@ import { QueryService } from '../query.service';
 })
 export class QueryInterfaceComponent implements OnInit {
 
-  results: any[];
+  results;
   query: string;
-  columns: Array<string>;
+  columns;
 
   constructor(
     public queryService: QueryService,
@@ -30,23 +30,20 @@ export class QueryInterfaceComponent implements OnInit {
         this.results = null;
         if (error.status === 404) {
           alert("No results")
-        } else if (error.status === 400){
-          alert("Invalid query (no modifications allowed)")
         } else {
-          console.error(error.status + " - " + error.body);
-          alert("An error occurred on the server. Please check the console.")
+          alert("Invalid query - check syntax (no modifications allowed)")
         }
       }
     );
 
+    this.columns = new Array()
     for(let row of this.results) {
       for(let col in row) {
         this.columns.push(col)
       }
       break;
     }
-    console.log(this.columns);
-    this.query = "";
+    this.query = null;
   }
 
 }
