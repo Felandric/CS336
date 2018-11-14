@@ -12,6 +12,9 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { BarDetailsComponent } from './bar-details/bar-details.component';
 import { DrinkerDetailsComponent } from './drinker-details/drinker-details.component';
 import { QueryInterfaceComponent } from './query-interface/query-interface.component';
+import { DrinkersComponent } from './drinkers/drinkers.component';
+import { BeersComponent } from './beers/beers.component';
+import { BeerDetailsComponent } from './beer-details/beer-details.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +22,10 @@ import { QueryInterfaceComponent } from './query-interface/query-interface.compo
     WelcomeComponent,
     BarDetailsComponent,
     DrinkerDetailsComponent,
-    QueryInterfaceComponent
+    QueryInterfaceComponent,
+    DrinkersComponent,
+    BeersComponent,
+    BeerDetailsComponent
   ],
   imports: [
     BrowserModule,

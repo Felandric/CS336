@@ -21,7 +21,7 @@ export class BarDetailsComponent implements OnInit {
       this.barName = paramMap.get('bar');
     })
 
-    this.barsService.getBar(this.barName).subscribe(
+    this.barsService.getBarDetails(this.barName).subscribe(
         data => {
           this.barDetails = data;
           this.barDetails.openTime = this.barsService.convertTime(this.barDetails.openTime);

@@ -22,28 +22,27 @@ export class QueryInterfaceComponent implements OnInit {
   }
 
   getQueryResults() {
+    this.columns = new Array()
+    this.results = new Array();
     this.queryService.getQueryResults(this.query).subscribe(
       data => {
         this.results = data;
       },
       (error: HttpResponse<any>) => {
-        this.results = null;
         if (error.status === 404) {
           alert("No results")
         } else {
           alert("Invalid query - check syntax (no modifications allowed)")
         }
+      },
+      () => {
+        for(let row of this.results) {
+          for(let col in row) {
+            this.columns.push(col)
+          }
+          break;
+        }
       }
     );
-
-    this.columns = new Array()
-    for(let row of this.results) {
-      for(let col in row) {
-        this.columns.push(col)
-      }
-      break;
-    }
-    this.query = null;
   }
-
 }

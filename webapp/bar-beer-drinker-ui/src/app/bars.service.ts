@@ -25,7 +25,7 @@ export class BarsService {
     return this.http.get<Bar[]>('/api/bar');
   }
 
-  getBar(bar: string) {
+  getBarDetails(bar: string) {
     return this.http.get<Bar>('/api/bar/' + bar);
   }
 

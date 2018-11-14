@@ -13,11 +13,11 @@ def get_bars():
 	return jsonify(database.get_bars())
 
 @app.route('/api/bar/<name>', methods=["GET"])
-def find_bar(name):
+def get_bar(name):
 	try:
 		if name is None:
 			raise ValueError("Bar is not specified")
-		bar = database.find_bar(name)
+		bar = database.get_bar(name)
 		if bar is None:
 			return make_response("No bar found with the given name", 404)
 		return jsonify(bar)
@@ -46,6 +46,10 @@ def get_drinker_transactions(name):
 	except Exception as e:
 		return make_response(str(e), 500)
 
+@app.route('/api/drinker', methods=["GET"])
+def get_drinkers():
+	return jsonify(database.get_drinkers())
+
 @app.route('/api/drinker/<name>', methods=["GET"])
 def get_drinker(name):
 	try:
@@ -60,14 +64,31 @@ def get_drinker(name):
 	except Exception as e:
 		return make_response(str(e), 500)
 
+@app.route('/api/beer', methods=["GET"])
+def get_beers():
+	return jsonify(database.get_beers())
+
+@app.route('/api/beer/<name>', methods=["GET"])
+def get_beer(name):
+	try:
+		if name is None:
+			raise ValueError("Beer is not specified")
+		beer = database.get_beer(name)
+		if beer is None:
+			return make_response("No beer found with the given name", 404)
+		return jsonify(beer)
+	except ValueError as e:
+		return make_response(str(e), 400)
+	except Exception as e:
+		return make_response(str(e), 500)
+
 @app.route('/api/query/<query>', methods=["GET"])
 def sql_query(query):
 	try:
 		if query is None:
 			raise ValueError("Query is not specified")
-		query = query.lower()
 		illegalOperations = ['create', 'insert', 'update', 'delete', 'drop']
-		if any(word in query for word in illegalOperations):
+		if any(word in query.lower() for word in illegalOperations):
 			raise ValueError("Query contains illegal operations")
 		result = database.sql_query(query)
 		if result is None:

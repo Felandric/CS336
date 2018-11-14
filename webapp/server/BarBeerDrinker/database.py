@@ -11,7 +11,7 @@ def get_bars():
 		rs = con.execute("SELECT * FROM bars;")
 		return [dict(row) for row in rs]
 
-def find_bar(name):
+def get_bar(name):
 	with engine.connect() as con:
 		query = sql.text("SELECT * FROM bars WHERE name = :name;")
 		rs = con.execute(query, name=name)
@@ -37,6 +37,25 @@ def get_drinker(name):
 		if result is None:
 			return None
 		return dict(result)
+
+def get_drinkers():
+	with engine.connect() as con:
+		rs = con.execute("SELECT * FROM drinkers;")
+		return [dict(row) for row in rs]
+
+def get_beer(name):
+	with engine.connect() as con:
+		query = sql.text("SELECT * FROM items WHERE name = :name;")
+		rs = con.execute(query, name=name)
+		result = rs.first()
+		if result is None:
+			return None
+		return dict(result)
+
+def get_beers():
+	with engine.connect() as con:
+		rs = con.execute("SELECT * FROM items WHERE manufacturer IS NOT NULL;")
+		return [dict(row) for row in rs]
 
 def get_drinker_transactions(drinker_name):
 	with engine.connect() as con:

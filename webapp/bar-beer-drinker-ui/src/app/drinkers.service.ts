@@ -28,12 +28,16 @@ export class DrinkersService {
     public http: HttpClient
   ) {}
 
-  getDrinkerTransactions(drinker: string) {
-    return this.http.get<Bill[]>('/api/transactions/' + drinker);
+  getDrinkers() {
+    return this.http.get<Drinker[]>('/api/drinker');
   }
 
   getDrinkerDetails(drinker: string) {
     return this.http.get<Drinker>('/api/drinker/' + drinker);
+  }
+
+  getDrinkerTransactions(drinker: string) {
+    return this.http.get<Bill[]>('/api/transactions/' + drinker);
   }
 
   convertTime(hour: string, minute: string) {

@@ -4,7 +4,7 @@
   type="text" class="form-control" id="query" required [(ngModel)]="query"
   name="query" placeholder="Enter your SQL query here"></textarea>
   <br/>
-  <button ng-disabled="!query" (click)="getQueryResults()">Submit</button>  
+  <button pButton type="button" [disabled]="!query" class="ui-button-secondary" label="Submit" (click)="getQueryResults()"></button>
   <br/>
   <br/>
   <p-table *ngIf="results" [value]="results">
@@ -25,3 +25,4 @@
   </p-table>
 
 </div>
+<br/>
