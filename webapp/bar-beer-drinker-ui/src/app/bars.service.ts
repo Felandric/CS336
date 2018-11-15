@@ -45,6 +45,10 @@ export class BarsService {
     return this.http.get<any[]>('/api/bar/busiesttimes/' + bar)
   }
 
+  getBarBusiestDays(bar: string) {
+    return this.http.get<any[]>('/api/bar/busiestdays/' + bar)
+  }
+
   convertTime(time: string) {
     if (Number(time) <= 12) {
       return time + ":00 AM";

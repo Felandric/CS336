@@ -90,6 +90,19 @@ export class BarDetailsComponent implements OnInit {
           this.renderBusiestTimesChart(hours, counts);
         }
       );
+
+      this.barsService.getBarBusiestDays(this.barName).subscribe(
+        data => {
+          const days = [];
+          const counts = [];
+          for(let row of data) {
+            days.push(row['date']);
+            counts.push(row['count']);
+          }
+
+          this.renderBusiestDaysChart(days, counts);
+        }
+      );
     }
 
 
@@ -237,6 +250,49 @@ export class BarDetailsComponent implements OnInit {
         categories: hours,
         title: {
           text: "Hour"
+        }
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: "Number of transactions"
+        },
+        labels: {
+          overflow: "justify"
+        }
+      },
+      plotOptions: {
+        bar: {
+          dataLabels: {
+            enabled: true
+          }
+        }
+      },
+      legend: {
+        enabled: false
+      },
+      credits: {
+        enabled: false
+      },
+      series: [{
+        name: 'count',
+        data: counts
+      }]
+    });
+  }
+
+  renderBusiestDaysChart(days: string[], counts: number[]) {
+    Highcharts.chart("busiestdayschart", {
+      chart: {
+        type: "column"
+      },
+      title: {
+        text: ("Popular Days At " + this.barName)
+      },
+      xAxis: {
+        categories: days,
+        title: {
+          text: "Day"
         }
       },
       yAxis: {

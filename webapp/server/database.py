@@ -53,6 +53,22 @@ def get_bar_busiest_times(bar_name):
 			r['count'] = int(r['count'])
 		return results
 
+def get_bar_busiest_days(bar_name):
+	with engine.connect() as con:
+		query = sql.text("SELECT date, COUNT(*) as count FROM issued INNER JOIN bills ON issued.transactionid=bills.transactionid WHERE issued.issuedby=:bar GROUP BY date")
+		rs = con.execute(query, bar=bar_name)
+		results = [dict(row) for row in rs]
+		for r in results:
+			r['count'] = int(r['count'])
+			r['date'] = datetime.datetime.strptime(r['date'], '%m/%d/%Y').strftime('%A') #get weekday
+
+		grouped_results = [{'date':'Monday', 'count':0}, {'date':'Tuesday', 'count':0}, {'date':'Wednesday', 'count':0}, {'date':'Thursday', 'count':0}, {'date':'Friday', 'count':0}, {'date':'Saturday', 'count':0}, {'date':'Sunday', 'count':0}]
+		for r in results:
+			for g in grouped_results:
+				if r['date'] == g['date']:
+					g['count'] += r['count']
+		return grouped_results
+
 def filter_beers(max_price):
 	with engine.connect() as con:
 		query = sql.text("SELECT * FROM sells WHERE price < :max_price;")
