@@ -4,9 +4,14 @@ from flask import make_response
 from flask import request
 import json
 
-from BarBeerDrinker import database
+import database
 
-app = Flask(__name__)
+application = Flask(__name__)
+app = application
+
+@app.route('/')
+def hello():
+        return 'Hello Back End!'
 
 @app.route('/api/bar', methods=["GET"])
 def get_bars():
@@ -81,7 +86,6 @@ def get_bar_busiest_times(name):
 		return make_response(str(e), 400)
 	except Exception as e:
 		return make_response(str(e), 500)
-
 
 @app.route('/api/bar/beerscheaperthan', methods=["POST"])
 def cheaper_than():
@@ -170,3 +174,6 @@ def sql_query(query):
 	except Exception as e:
 		print(str(e))
 		return make_response(str(e), 500)
+				
+if __name__ == '__main__':
+        application.run()

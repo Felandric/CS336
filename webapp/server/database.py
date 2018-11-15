@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy import sql
 import datetime
 
-from BarBeerDrinker import config
+import config
 
 engine = create_engine(config.database_uri)
 
