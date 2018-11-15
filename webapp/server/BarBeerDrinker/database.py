@@ -20,6 +20,39 @@ def get_bar(name):
 			return None
 		return dict(result)
 
+def get_bar_top_spenders(bar_name):
+	with engine.connect() as con:
+		query = sql.text("SELECT issuedto AS drinker, SUM(totalCharge) AS spent FROM issued INNER JOIN bills ON issued.transactionid=bills.transactionid WHERE issuedby=:bar GROUP BY issuedto ORDER BY spent DESC")
+		rs = con.execute(query, bar=bar_name)
+		return [dict(row) for row in rs]
+
+def get_bar_top_beers(bar_name):
+	with engine.connect() as con:
+		query = sql.text("SELECT contains.item, SUM(contains.quantity) AS count FROM issued INNER JOIN contains ON issued.transactionid=contains.transactionid WHERE contains.item IN (SELECT name FROM items WHERE manufacturer IS NOT NULL) AND issued.issuedby=:bar GROUP BY item ORDER BY count DESC")
+		rs = con.execute(query, bar=bar_name)
+		results = [dict(row) for row in rs]
+		for r in results:
+			r['count'] = int(r['count'])
+		return results
+
+def get_bar_top_manufacturers(bar_name):
+	with engine.connect() as con:
+		query = sql.text("SELECT manufacturer, SUM(c)  as count FROM (SELECT contains.item, SUM(contains.quantity) AS c FROM issued INNER JOIN contains ON issued.transactionid=contains.transactionid WHERE contains.item IN (SELECT name FROM items WHERE manufacturer IS NOT NULL) AND issued.issuedby=:bar GROUP BY item ORDER BY c DESC) T INNER JOIN items ON T.item=items.name GROUP BY items.manufacturer ORDER BY count DESC")
+		rs = con.execute(query, bar=bar_name)
+		results = [dict(row) for row in rs]
+		for r in results:
+			r['count'] = int(r['count'])
+		return results
+
+def get_bar_busiest_times(bar_name):
+	with engine.connect() as con:
+		query = sql.text("SELECT hour, COUNT(*) as count FROM issued INNER JOIN bills ON issued.transactionid=bills.transactionid WHERE issued.issuedby=:bar GROUP BY hour ORDER BY hour")
+		rs = con.execute(query, bar=bar_name)
+		results = [dict(row) for row in rs]
+		for r in results:
+			r['count'] = int(r['count'])
+		return results
+
 def filter_beers(max_price):
 	with engine.connect() as con:
 		query = sql.text("SELECT * FROM sells WHERE price < :max_price;")
@@ -42,6 +75,15 @@ def get_drinkers():
 	with engine.connect() as con:
 		rs = con.execute("SELECT * FROM drinkers;")
 		return [dict(row) for row in rs]
+
+def get_drinker_favorite_beers(drinker_name):
+	with engine.connect() as con:
+		query = sql.text("SELECT contains.item, SUM(contains.quantity) AS count FROM issued INNER JOIN contains ON issued.transactionid=contains.transactionid WHERE contains.item IN (SELECT name FROM items WHERE manufacturer IS NOT NULL) AND issued.issuedto=:drinker GROUP BY item ORDER BY count DESC")
+		rs = con.execute(query, drinker=drinker_name)
+		results = [dict(row) for row in rs]
+		for r in results:
+			r['count'] = int(r['count'])
+		return results
 
 def get_beer(name):
 	with engine.connect() as con:
@@ -73,4 +115,8 @@ def sql_query(user_query):
 	with engine.connect() as con:
 		query = sql.text(user_query)
 		rs = con.execute(query)
-		return [dict(row) for row in rs]
+		results = [dict(row) for row in rs]
+		for r in results:
+			for key in r.keys():
+				r[key] = str(r[key])
+		return results

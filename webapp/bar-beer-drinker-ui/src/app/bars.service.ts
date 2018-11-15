@@ -29,6 +29,22 @@ export class BarsService {
     return this.http.get<Bar>('/api/bar/' + bar);
   }
 
+  getBarTopSpenders(bar: string) {
+    return this.http.get<any[]>('/api/bar/topspenders/' + bar)
+  }
+
+  getBarTopBeers(bar: string) {
+    return this.http.get<any[]>('/api/bar/topbeers/' + bar)
+  }
+
+  getBarTopManufacturers(bar: string) {
+    return this.http.get<any[]>('/api/bar/topmanufacturers/' + bar)
+  }
+
+  getBarBusiestTimes(bar: string) {
+    return this.http.get<any[]>('/api/bar/busiesttimes/' + bar)
+  }
+
   convertTime(time: string) {
     if (Number(time) <= 12) {
       return time + ":00 AM";

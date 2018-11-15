@@ -37,7 +37,11 @@ export class DrinkersService {
   }
 
   getDrinkerTransactions(drinker: string) {
-    return this.http.get<Bill[]>('/api/transactions/' + drinker);
+    return this.http.get<Bill[]>('/api/drinker/transactions/' + drinker);
+  }
+
+  getDrinkerFavoriteBeers(drinker: string) {
+    return this.http.get<any[]>('/api/drinker/favoritebeers/' + drinker);
   }
 
   convertTime(hour: string, minute: string) {

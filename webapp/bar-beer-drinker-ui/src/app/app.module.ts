@@ -16,6 +16,7 @@ import { DrinkersComponent } from './drinkers/drinkers.component';
 import { BeersComponent } from './beers/beers.component';
 import { BeerDetailsComponent } from './beer-details/beer-details.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +26,7 @@ import { BeerDetailsComponent } from './beer-details/beer-details.component';
     QueryInterfaceComponent,
     DrinkersComponent,
     BeersComponent,
-    BeerDetailsComponent
+    BeerDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,7 +35,7 @@ import { BeerDetailsComponent } from './beer-details/beer-details.component';
     TableModule,
     FormsModule,
     InputTextareaModule,
-    ButtonModule
+    ButtonModule,
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent]

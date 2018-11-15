@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { BeersService, Beer } from '../beers.service';
 import { HttpResponse } from '@angular/common/http';
 
+declare const Highcharts: any;
+
 @Component({
   selector: 'app-beer-details',
   templateUrl: './beer-details.component.html',
@@ -34,6 +36,8 @@ export class BeerDetailsComponent implements OnInit {
           }
         }
       );
+
+
   }
 
   ngOnInit() {
