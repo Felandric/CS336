@@ -56,10 +56,50 @@ export class DrinkerDetailsComponent implements OnInit {
           counts.push(row['count']);
         }
 
-        this.renderFavoriteBeersChart(beers, counts);
+        this.renderFavoriteBeersChart(beers.slice(0, 10), counts.slice(0, 10));
+      }
+    );
+
+    this.drinkersService.getDrinkerBusiestTimes(this.drinkerName).subscribe(
+      data => {
+        const hours = [];
+        const counts = [];
+        for(let row of data) {
+          hours.push(this.drinkersService.convertTime(row['hour'], "0"));
+          counts.push(row['count']);
+        }
+
+        this.renderBusiestTimesChart(hours, counts);
+      }
+    );
+
+    this.drinkersService.getDrinkerBusiestDays(this.drinkerName).subscribe(
+      data => {
+        const days = [];
+        const counts = [];
+        for(let row of data) {
+          days.push(row['date']);
+          counts.push(row['count']);
+        }
+
+        this.renderBusiestDaysChart(days, counts);
+      }
+    );
+
+    this.drinkersService.getDrinkerBusiestMonths(this.drinkerName).subscribe(
+      data => {
+        const months = [];
+        const counts = [];
+        for(let row of data) {
+          months.push(row['date']);
+          counts.push(row['count']);
+        }
+
+        this.renderBusiestMonthsChart(months, counts);
       }
     );
   }
+
   ngOnInit() {
   }
 
@@ -105,5 +145,132 @@ export class DrinkerDetailsComponent implements OnInit {
       }]
     });
   }
+  renderBusiestTimesChart(hours: string[], counts: number[]) {
+    Highcharts.chart("busiesttimeschart", {
+      chart: {
+        type: "column"
+      },
+      title: {
+        text: ("Times Of Day When " + this.drinkerName + " Is Drinking")
+      },
+      xAxis: {
+        categories: hours,
+        title: {
+          text: "Hour"
+        }
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: "Number of transactions"
+        },
+        labels: {
+          overflow: "justify"
+        }
+      },
+      plotOptions: {
+        bar: {
+          dataLabels: {
+            enabled: true
+          }
+        }
+      },
+      legend: {
+        enabled: false
+      },
+      credits: {
+        enabled: false
+      },
+      series: [{
+        name: 'count',
+        data: counts
+      }]
+    });
+  }
 
+  renderBusiestDaysChart(days: string[], counts: number[]) {
+    Highcharts.chart("busiestdayschart", {
+      chart: {
+        type: "column"
+      },
+      title: {
+        text: ("Weekdays When " + this.drinkerName + " Is Drinking")
+      },
+      xAxis: {
+        categories: days,
+        title: {
+          text: "Day"
+        }
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: "Number of transactions"
+        },
+        labels: {
+          overflow: "justify"
+        }
+      },
+      plotOptions: {
+        bar: {
+          dataLabels: {
+            enabled: true
+          }
+        }
+      },
+      legend: {
+        enabled: false
+      },
+      credits: {
+        enabled: false
+      },
+      series: [{
+        name: 'count',
+        data: counts
+      }]
+    });
+  }
+
+  renderBusiestMonthsChart(months: string[], counts: number[]) {
+    Highcharts.chart("busiestmonthschart", {
+      chart: {
+        type: "column"
+      },
+      title: {
+        text: ("Months When " + this.drinkerName + " Is Drinking")
+      },
+      xAxis: {
+        categories: months,
+        title: {
+          text: "Month"
+        }
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: "Number of transactions"
+        },
+        labels: {
+          overflow: "justify"
+        }
+      },
+      plotOptions: {
+        bar: {
+          dataLabels: {
+            enabled: true
+          }
+        }
+      },
+      legend: {
+        enabled: false
+      },
+      credits: {
+        enabled: false
+      },
+      series: [{
+        name: 'count',
+        data: counts
+      }]
+    });
+  }
 }

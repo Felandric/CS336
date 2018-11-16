@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BarsService, Bar } from '../bars.service';
+import { ModificationService } from '../modification.service';
 import { HttpResponse } from '@angular/common/http';
+import { finalize } from 'rxjs/operators';
+import { v4 as uuid } from 'uuid';
+
 
 declare const Highcharts: any;
 
@@ -14,11 +18,26 @@ export class BarDetailsComponent implements OnInit {
 
   barName: string;
   barDetails: Bar;
+  sells;
+  itemcounts: number[];
+  potentialdrinkers;
+  selectedDrinker;
+  selectedDate;
+  tips = [
+    {name:'10%', value:.10},
+    {name:'15%', value:.15},
+    {name:'20%', value:.20},
+  ];
+  selectedTip;
+  openInt;
+  closeInt;
 
   constructor(
     public barsService: BarsService,
+    public modificationService: ModificationService,
     public route: ActivatedRoute
   ) {
+
     route.paramMap.subscribe((paramMap) => {
       this.barName = paramMap.get('bar');
     })
@@ -26,6 +45,8 @@ export class BarDetailsComponent implements OnInit {
     this.barsService.getBarDetails(this.barName).subscribe(
         data => {
           this.barDetails = data;
+          this.openInt = this.barDetails.openTime;
+          this.closeInt = this.barDetails.closeTime;
           this.barDetails.openTime = this.barsService.convertTime(this.barDetails.openTime);
           this.barDetails.closeTime = this.barsService.convertTime(this.barDetails.closeTime);
         },
@@ -48,7 +69,7 @@ export class BarDetailsComponent implements OnInit {
             amounts.push(row['spent']);
           }
 
-          this.renderTopSpendersChart(drinkers, amounts);
+          this.renderTopSpendersChart(drinkers.slice(0, 10), amounts.slice(0, 10));
         }
       );
 
@@ -61,7 +82,7 @@ export class BarDetailsComponent implements OnInit {
             counts.push(row['count']);
           }
 
-          this.renderTopBeersChart(beers, counts);
+          this.renderTopBeersChart(beers.slice(0, 10), counts.slice(0, 10));
         }
       );
 
@@ -74,7 +95,7 @@ export class BarDetailsComponent implements OnInit {
             counts.push(row['count']);
           }
 
-          this.renderTopManufacturersChart(manfs, counts);
+          this.renderTopManufacturersChart(manfs.slice(0, 10), counts.slice(0, 10));
         }
       );
 
@@ -103,10 +124,108 @@ export class BarDetailsComponent implements OnInit {
           this.renderBusiestDaysChart(days, counts);
         }
       );
+
+      this.barsService.getBarSells(this.barName)
+      .pipe(finalize(() => {
+          this.itemcounts = new Array();
+          for(let item of this.sells) {
+            this.itemcounts.push(0)
+          }
+      }))
+      .subscribe(
+        data => {
+          this.sells = data;
+        }
+      );
+
+      this.barsService.getBarPotentialDrinkers(this.barName).subscribe(
+        data => {
+          this.potentialdrinkers = data;
+        }
+      );
+
     }
 
 
   ngOnInit() {
+  }
+
+  totalCharge() {
+    let totalCharge = 0;
+    if(this.sells) {
+      this.sells.forEach((item, index) => {
+        totalCharge += item.price * this.itemcounts[index];
+      });
+    }
+    return totalCharge;
+  }
+
+  isTimeValid() {
+    return (this.selectedDate.getHours() >= this.openInt && this.selectedDate.getHours() < this.closeInt)
+  }
+
+  addTransaction() {
+    let transactionId = uuid();
+
+    let containsInsert = "INSERT INTO contains(transactionid, item, quantity) VALUES ";
+    this.sells.forEach((item, index) => {
+      if (this.itemcounts[index] !== 0) {
+        containsInsert = containsInsert + "(\"" + transactionId + "\",\"" + item.item + "\"," + this.itemcounts[index] + "),";
+      }
+    });
+    containsInsert = containsInsert.slice(0, -1);
+    console.log(containsInsert);
+
+    let billsInsert = "INSERT INTO bills(transactionid, totalCharge, tip) VALUES " + "(\""
+    + transactionId + "\"," + this.totalCharge() + "," + (this.selectedTip['value'] * this.totalCharge()) + ")";
+    console.log(billsInsert)
+
+    let selectedDate = this.selectedDate;
+    let selectedDateString = selectedDate.getMonth() + "/" + selectedDate.getDate() + "/" + selectedDate.getFullYear()
+    let issuedInsert = "INSERT INTO issued(transactionid, issuedto, issuedby, date, hour, minute) VALUES " + "(\""
+    + transactionId + "\",\"" + this.selectedDrinker['name'] + "\",\"" + this.barName + "\",\"" + selectedDateString + "\","
+    + selectedDate.getHours() + "," + selectedDate.getMinutes() + ")"
+
+    console.log(issuedInsert)
+
+    this.modificationService.getModificationResults(issuedInsert).subscribe(
+      data => {
+        let rowsMatched = data['rows'];
+        console.log(rowsMatched + " rows changed")
+      },
+      (error: HttpResponse<any>) => {
+        console.log(error['error']);
+      },
+      () => {
+        this.modificationService.getModificationResults(billsInsert).subscribe(
+          data => {
+            let rowsMatched = data['rows'];
+            console.log(rowsMatched + " rows changed")
+          },
+          (error: HttpResponse<any>) => {
+            console.log(error['error']);
+          },
+          () => {
+            this.modificationService.getModificationResults(containsInsert).subscribe(
+              data => {
+                let rowsMatched = data['rows'];
+                console.log(rowsMatched + " rows changed")
+              },
+              (error: HttpResponse<any>) => {
+                console.log(error['error']);
+              }
+            );
+          }
+        );
+      }
+    );
+
+    this.selectedDrinker = null;
+    for (let count of this.itemcounts) {
+      count = 0;
+    }
+    this.selectedTip = null;
+    this.selectedDate = null;
   }
 
   renderTopSpendersChart(drinkers: string[], amounts: number[]) {

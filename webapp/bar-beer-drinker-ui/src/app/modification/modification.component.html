@@ -1,0 +1,13 @@
+<br/>
+<div class="container">
+  <textarea [rows]="5" [cols]="30" pInputTextarea autoResize="autoResize"
+  type="text" class="form-control" id="modification" required [(ngModel)]="modification"
+  name="query" placeholder="Enter your SQL modification here"></textarea>
+  <br/>
+  <button pButton type="button" [disabled]="!modification" class="ui-button-secondary" label="Submit" (click)="getModificationResults()"></button>
+  <br/>
+  <br/>
+  <p-progressSpinner *ngIf="inprogress" [style]="{width: '75px', height: '50px'}"></p-progressSpinner>
+  <span class="lead">{{result}}</span>
+</div>
+<br/>

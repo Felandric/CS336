@@ -7,6 +7,10 @@
   <button pButton type="button" [disabled]="!query" class="ui-button-secondary" label="Submit" (click)="getQueryResults()"></button>
   <br/>
   <br/>
+  <p-progressSpinner *ngIf="inprogress" [style]="{width: '75px', height: '50px'}"></p-progressSpinner>
+
+  <span class="lead">{{error}}</span>
+
   <p-table *ngIf="results" [value]="results">
       <ng-template pTemplate="header">
           <tr>

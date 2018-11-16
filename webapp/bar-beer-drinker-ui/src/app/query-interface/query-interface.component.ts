@@ -12,9 +12,11 @@ export class QueryInterfaceComponent implements OnInit {
   results;
   query: string;
   columns;
+  error;
+  inprogress = false;
 
   constructor(
-    public queryService: QueryService,
+    public queryService: QueryService
   ) {
   }
 
@@ -22,17 +24,19 @@ export class QueryInterfaceComponent implements OnInit {
   }
 
   getQueryResults() {
-    this.columns = new Array()
+    this.inprogress = true;
+    this.error = "";
+    this.columns = new Array();
     this.results = new Array();
     this.queryService.getQueryResults(this.query).subscribe(
       data => {
         this.results = data;
       },
       (error: HttpResponse<any>) => {
-        if (error.status === 404) {
-          alert("No results")
+        if (error.status === 400) {
+          this.error = "No query specified or query contains illegal operations (no modifications allowed)"
         } else {
-          alert("Invalid query - check syntax (no modifications allowed)")
+          this.error = error['error']
         }
       },
       () => {
@@ -42,6 +46,7 @@ export class QueryInterfaceComponent implements OnInit {
           }
           break;
         }
+        this.inprogress = false;
       }
     );
   }

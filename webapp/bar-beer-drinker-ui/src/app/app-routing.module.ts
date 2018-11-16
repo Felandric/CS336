@@ -8,6 +8,7 @@ import { BarDetailsComponent } from './bar-details/bar-details.component';
 import { BeerDetailsComponent } from './beer-details/beer-details.component';
 import { DrinkerDetailsComponent } from './drinker-details/drinker-details.component';
 import { QueryInterfaceComponent } from './query-interface/query-interface.component';
+import { ModificationComponent } from './modification/modification.component';
 
 const routes: Routes = [
 	{
@@ -49,7 +50,13 @@ const routes: Routes = [
 		path: "query",
 		pathMatch: "full",
 		component: QueryInterfaceComponent
+	},
+	{
+		path: "modify",
+		pathMatch: "full",
+		component: ModificationComponent
 	}
+
 ];
 
 @NgModule({

@@ -29,6 +29,14 @@ export class BarsService {
     return this.http.get<Bar>('/api/bar/' + bar);
   }
 
+  getBarSells(bar: string) {
+    return this.http.get<any[]>('/api/bar/sells/' + bar)
+  }
+
+  getBarPotentialDrinkers(bar: string) {
+    return this.http.get<any[]>('/api/bar/potentialdrinkers/' + bar)
+  }
+
   getBarTopSpenders(bar: string) {
     return this.http.get<any[]>('/api/bar/topspenders/' + bar)
   }

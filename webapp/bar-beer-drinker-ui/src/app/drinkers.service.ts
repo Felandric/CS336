@@ -44,6 +44,18 @@ export class DrinkersService {
     return this.http.get<any[]>('/api/drinker/favoritebeers/' + drinker);
   }
 
+  getDrinkerBusiestTimes(drinker: string) {
+    return this.http.get<any[]>('/api/drinker/busiesttimes/' + drinker)
+  }
+
+  getDrinkerBusiestDays(drinker: string) {
+    return this.http.get<any[]>('/api/drinker/busiestdays/' + drinker)
+  }
+
+  getDrinkerBusiestMonths(drinker: string) {
+    return this.http.get<any[]>('/api/drinker/busiestmonths/' + drinker)
+  }
+
   convertTime(hour: string, minute: string) {
     if (Number(minute) < 10) {
       minute = "0" + minute;

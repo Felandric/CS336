@@ -1,10 +1,11 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TableModule } from 'primeng/table';
 import { FormsModule } from '@angular/forms';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import {ButtonModule} from 'primeng/button';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import {DropdownModule} from 'primeng/dropdown';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,7 +16,11 @@ import { QueryInterfaceComponent } from './query-interface/query-interface.compo
 import { DrinkersComponent } from './drinkers/drinkers.component';
 import { BeersComponent } from './beers/beers.component';
 import { BeerDetailsComponent } from './beer-details/beer-details.component';
-
+import { ModificationComponent } from './modification/modification.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {CalendarModule} from 'primeng/calendar';
+import {SpinnerModule} from 'primeng/spinner';
 
 @NgModule({
   declarations: [
@@ -27,6 +32,7 @@ import { BeerDetailsComponent } from './beer-details/beer-details.component';
     DrinkersComponent,
     BeersComponent,
     BeerDetailsComponent,
+    ModificationComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,6 +42,11 @@ import { BeerDetailsComponent } from './beer-details/beer-details.component';
     FormsModule,
     InputTextareaModule,
     ButtonModule,
+    ProgressSpinnerModule,
+    DropdownModule,
+    BrowserAnimationsModule,
+    CalendarModule,
+    SpinnerModule,
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent]
