@@ -13,6 +13,7 @@ declare const Highcharts: any;
 export class DrinkerDetailsComponent implements OnInit {
 
   bills: Bill[];
+  itemizedBills;
   drinker: Drinker;
   drinkerName: string;
 
@@ -30,6 +31,20 @@ export class DrinkerDetailsComponent implements OnInit {
         for (let bill of this.bills) {
           bill.hour = this.drinkersService.convertTime(bill.hour, bill.minute);
         }
+      },
+      (error: HttpResponse<any>) => {
+        if (error.status === 404) {
+          alert("Drinker not found")
+        } else {
+          console.error(error.status + " - " + error.body);
+          alert("An error occurred on the server. Please check the console.")
+        }
+      }
+    );
+
+    this.drinkersService.getDrinkerItemizedTransactions(this.drinkerName).subscribe(
+      data => {
+        this.itemizedBills = data;
       },
       (error: HttpResponse<any>) => {
         if (error.status === 404) {

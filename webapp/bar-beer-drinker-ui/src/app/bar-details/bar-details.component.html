@@ -54,7 +54,7 @@
       <br/>
     </li>
     <br/>
-    Total Charge: ${{totalCharge().toFixed(2)}}
+    Total Charge (7% sales tax): ${{totalCharge().toFixed(2)}}
   </div>
   <br/>
   <p-dropdown [options]="tips" [(ngModel)]="selectedTip" placeholder="Select a tip %" optionLabel="name" [showClear]="true"></p-dropdown>
@@ -66,5 +66,8 @@
   <br/>
   <br/>
   <button pButton type="button" [disabled]="!selectedDrinker || !selectedTip || !selectedDate || totalCharge() == 0 || !isTimeValid()" class="ui-button-secondary" label="Add Transaction" (click)="addTransaction()"></button>
+  <br/>
+  <br/>
+  {{this.addTransactionResult}}
 </div>
 <br/>

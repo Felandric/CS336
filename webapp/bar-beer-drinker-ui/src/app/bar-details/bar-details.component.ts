@@ -31,6 +31,7 @@ export class BarDetailsComponent implements OnInit {
   selectedTip;
   openInt;
   closeInt;
+  addTransactionResult;
 
   constructor(
     public barsService: BarsService,
@@ -151,13 +152,13 @@ export class BarDetailsComponent implements OnInit {
   }
 
   totalCharge() {
-    let totalCharge = 0;
+    let sumTotal = 0;
     if(this.sells) {
       this.sells.forEach((item, index) => {
-        totalCharge += item.price * this.itemcounts[index];
+        sumTotal += item.price * this.itemcounts[index];
       });
     }
-    return totalCharge;
+    return sumTotal * 1.07; //tax!
   }
 
   isTimeValid() {
@@ -195,6 +196,7 @@ export class BarDetailsComponent implements OnInit {
       },
       (error: HttpResponse<any>) => {
         console.log(error['error']);
+        this.addTransactionResult = "There was an error in creating your transaction. Please check the console and try again."
       },
       () => {
         this.modificationService.getModificationResults(billsInsert).subscribe(
@@ -213,6 +215,9 @@ export class BarDetailsComponent implements OnInit {
               },
               (error: HttpResponse<any>) => {
                 console.log(error['error']);
+              },
+              () => {
+                this.addTransactionResult = "Transaction successfully added!"
               }
             );
           }
@@ -221,9 +226,10 @@ export class BarDetailsComponent implements OnInit {
     );
 
     this.selectedDrinker = null;
-    for (let count of this.itemcounts) {
-      count = 0;
+    for (let count in this.itemcounts) {
+      this.itemcounts[count] = 0;
     }
+    console.log(this.itemcounts)
     this.selectedTip = null;
     this.selectedDate = null;
   }

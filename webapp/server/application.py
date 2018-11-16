@@ -150,6 +150,21 @@ def get_drinker_transactions(name):
 	except Exception as e:
 		return make_response(str(e), 500)
 
+@app.route('/api/drinker/itemizedtransactions/<name>', methods=["GET"])
+def get_drinker_itemized_transactions(name):
+	try:
+		if name is None:
+			raise ValueError("Drinker is not specified")
+		transactions = database.get_drinker_itemized_transactions(name)
+		if transactions is None:
+			return make_response("No drinker found with the given name", 404)
+		return jsonify(transactions)
+	except ValueError as e:
+		return make_response(str(e), 400)
+	except Exception as e:
+		return make_response(str(e), 500)
+
+
 @app.route('/api/drinker', methods=["GET"])
 def get_drinkers():
 	return jsonify(database.get_drinkers())

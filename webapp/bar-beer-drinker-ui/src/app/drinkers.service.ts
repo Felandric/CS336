@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 export interface Bill {
-  transationid: string;
+  transactionid: string;
   issuedby: string;
   date: string;
   hour: string;
@@ -38,6 +38,10 @@ export class DrinkersService {
 
   getDrinkerTransactions(drinker: string) {
     return this.http.get<Bill[]>('/api/drinker/transactions/' + drinker);
+  }
+
+  getDrinkerItemizedTransactions(drinker: string) {
+    return this.http.get<any>('/api/drinker/itemizedtransactions/' + drinker);
   }
 
   getDrinkerFavoriteBeers(drinker: string) {

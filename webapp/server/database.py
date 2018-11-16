@@ -204,7 +204,7 @@ def get_beers():
 
 def get_drinker_transactions(drinker_name):
 	with engine.connect() as con:
-		query = sql.text("SELECT issued.transactionid, issuedby, date, hour, minute, totalCharge, tip FROM issued INNER JOIN bills ON issued.transactionid=bills.transactionid WHERE issued.issuedto=:drinker ;")
+		query = sql.text("SELECT issued.transactionid, issuedby, date, hour, minute, totalCharge, tip FROM issued INNER JOIN bills ON issued.transactionid=bills.transactionid WHERE issued.issuedto=:drinker ")
 		rs = con.execute(query, drinker=drinker_name)
 		results = [dict(row) for row in rs]
 		for r in results:
@@ -215,6 +215,19 @@ def get_drinker_transactions(drinker_name):
 			r['totalCharge'] = format(float(r['totalCharge']), '.2f')
 			r['tip'] = format(float(r['tip']), '.2f')
 		return results
+
+def get_drinker_itemized_transactions(drinker_name):
+	with engine.connect() as con:
+		query = sql.text("SELECT issued.transactionid as id, item, quantity FROM issued INNER JOIN contains ON issued.transactionid=contains.transactionid WHERE issued.issuedto=:drinker ")
+		rs = con.execute(query, drinker=drinker_name)
+		results = [dict(row) for row in rs]
+		grouped_results = dict()
+		for r in results:
+			if not r['id'] in grouped_results:
+				grouped_results[r['id']] = [{"item": r['item'], "quantity": r['quantity']}]
+			else:
+				grouped_results[r['id']].append({"item": r['item'], "quantity": r['quantity']})
+		return grouped_results
 
 def sql_query(user_query):
 	with engine.connect() as con:
