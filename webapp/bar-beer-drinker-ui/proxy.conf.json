@@ -1,6 +1,6 @@
 {
 	"/api": {
-		"target": "http://localhost:5000",
+		"target": "http://barbeerdrinker-flask-env.pnfivnyctg.us-east-1.elasticbeanstalk.com",
 		"secure": false
 	}
 }
