@@ -229,7 +229,6 @@ export class BarDetailsComponent implements OnInit {
     for (let count in this.itemcounts) {
       this.itemcounts[count] = 0;
     }
-    console.log(this.itemcounts)
     this.selectedTip = null;
     this.selectedDate = null;
   }
