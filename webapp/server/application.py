@@ -4,16 +4,10 @@ from flask import make_response
 from flask import request
 from sqlalchemy import exc
 import json
-from werkzeug.routing import PathConverter
 import database
-
-class EverythingConverter(PathConverter):
-    regex = '.*?'
 
 application = Flask(__name__)
 app = application
-
-app.url_map.converters['everything'] = EverythingConverter
 
 @app.route('/')
 def hello():
@@ -318,7 +312,7 @@ def get_beer_busiest_days(name):
 	except Exception as e:
 		return make_response(str(e), 500)
 
-@app.route('/api/query/<everything:query>', methods=["GET"])
+@app.route('/api/query/<path:query>', methods=["GET"])
 def sql_query(query):
 	try:
 		if query is None:
@@ -336,7 +330,7 @@ def sql_query(query):
 		print(str(e))
 		return make_response(str(e), 500)
 
-@app.route('/api/modification/<everything:modification>', methods=["GET"])
+@app.route('/api/modification/<path:modification>', methods=["GET"])
 def sql_modification(modification):
 	try:
 		if modification is None:
