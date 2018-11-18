@@ -62,7 +62,7 @@
   <br/>
   <span class="lead">Select a date and time (within open hours)</span>
   <br/>
-  <p-calendar [(ngModel)]="selectedDate" [inline]="true" [showTime]="true" [style]="{display: inline-block}"></p-calendar>
+  <p-calendar [(ngModel)]="selectedDate" [inline]="true" [showTime]="true"></p-calendar>
   <br/>
   <br/>
   <button pButton type="button" [disabled]="!selectedDrinker || !selectedTip || !selectedDate || totalCharge() == 0 || !isTimeValid()" class="ui-button-secondary" label="Add Transaction" (click)="addTransaction()"></button>
