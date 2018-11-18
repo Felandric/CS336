@@ -11,6 +11,6 @@ export class ModificationService {
   ) { }
 
   getModificationResults(modification: string) {
-    return this.http.get<any[]>('/api/modification/' + encodeURIComponent(modification));
+    return this.http.get<any[]>('/api/modification/' + modification);
   }
 }

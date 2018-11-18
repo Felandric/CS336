@@ -11,6 +11,6 @@ export class QueryService {
   ) {}
 
   getQueryResults(query: string) {
-    return this.http.get<any[]>('/api/query/' + encodeURIComponent(query));
+    return this.http.get<any[]>('/api/query/' + query);
   }
 }
