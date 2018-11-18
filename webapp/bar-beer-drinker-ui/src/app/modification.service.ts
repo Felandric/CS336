@@ -11,6 +11,7 @@ export class ModificationService {
   ) { }
 
   getModificationResults(modification: string) {
+    modification.replace("/", "|"); //fix routing issues
     return this.http.get<any[]>('/api/modification/' + modification);
   }
 }

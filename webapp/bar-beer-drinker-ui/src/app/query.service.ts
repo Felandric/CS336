@@ -11,6 +11,7 @@ export class QueryService {
   ) {}
 
   getQueryResults(query: string) {
+    query.replace("/", "|"); //fix routing issues
     return this.http.get<any[]>('/api/query/' + query);
   }
 }
