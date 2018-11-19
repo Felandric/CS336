@@ -231,7 +231,6 @@ def get_drinker_itemized_transactions(drinker_name):
 
 def sql_query(user_query):
 	with engine.connect() as con:
-		query = query.replace("|", "/") #fix routing issues
 		query = sql.text(user_query)
 		rs = con.execute(query)
 		results = [dict(row) for row in rs]
@@ -242,7 +241,6 @@ def sql_query(user_query):
 
 def sql_modification(user_modification):
 	with engine.connect() as con:
-		modification = modification.replace("|", "/")
 		modification = sql.text(user_modification)
 		rs = con.execute(modification)
 		return dict({'rows': rs.rowcount})
